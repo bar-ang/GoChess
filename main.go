@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"goChess/chess"
 )
 
 func main() {
-	fmt.Println("Hello, world!")
+	p := chess.NewPiece(2, 4, chess.PieceBishop, chess.PlayerBlack)
+	fmt.Printf("P: %v\n", p)
 }
