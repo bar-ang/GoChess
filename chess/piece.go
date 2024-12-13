@@ -2,23 +2,23 @@ package chess
 
 import "fmt"
 
-type PieceType int
-type PlayerType int
+type PieceType string
+type PlayerType string
 
 const (
-    PieceNone PieceType = iota
-    PiecePawn
-    PieceBishop
-    PieceKnight
-    PieceRook
-    PieceQueen
-    PieceKing
+    PieceNone   PieceType = "None"
+    PiecePawn   PieceType = "Pawn"
+    PieceBishop PieceType = "Bishop"
+    PieceKnight PieceType = "Knight"
+    PieceRook   PieceType = "Rook"
+    PieceQueen  PieceType = "Queen"
+    PieceKing   PieceType = "King"
 )
 
 const (
-    PlayerNone PlayerType = iota
-    PlayerWhite
-    PlayerBlack
+    PlayerNone  PlayerType = "None"
+    PlayerWhite PlayerType = "White"
+    PlayerBlack PlayerType = "Black"
 )
 
 type square struct {
