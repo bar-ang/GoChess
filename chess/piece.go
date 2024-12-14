@@ -32,14 +32,14 @@ type Piece struct {
     player PlayerType
 }
 
-func NewPiece(x, y int, pieceType PieceType, player PlayerType) *Piece {
-    return &Piece {
+func NewPiece(x, y int, pieceType PieceType, player PlayerType) Piece {
+    return Piece {
         pos: square{x, y},
         pieceType: pieceType,
         player: player,
     }
 }
 
-func (p *Piece) String() string {
+func (p Piece) String() string {
     return fmt.Sprintf("type: %v (player: %v) on: %v,%v", p.pieceType, p.player, p.pos.x, p.pos.y)
 }
