@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
-	p := chess.NewPiece(chess.PieceBishop, chess.PlayerBlack)
-	fmt.Printf("P: %v\n", p)
+	board := chess.NewChessBoard()
+	board.SetStartingPos()
+	fmt.Printf("P: %v\n", board)
 }
