@@ -32,6 +32,14 @@ type Piece struct {
     player PlayerType
 }
 
+func NoPiece() Piece {
+    return Piece {pieceType: PieceNone}
+}
+
+func (p Piece) isPiece() bool {
+    return p.pieceType != PieceNone
+}
+
 func NewPiece(x, y int, pieceType PieceType, player PlayerType) Piece {
     return Piece {
         pos: square{x, y},
