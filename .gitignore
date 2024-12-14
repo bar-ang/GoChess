@@ -3,3 +3,4 @@ pkg/
 *.exe
 *.log
 *.out
+build/
