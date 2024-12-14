@@ -21,13 +21,7 @@ const (
     PlayerBlack PlayerType = "Black"
 )
 
-type square struct {
-    x int
-    y int
-}
-
 type Piece struct {
-    pos square
     pieceType PieceType
     player PlayerType
 }
@@ -40,14 +34,13 @@ func (p Piece) isPiece() bool {
     return p.pieceType != PieceNone
 }
 
-func NewPiece(x, y int, pieceType PieceType, player PlayerType) Piece {
+func NewPiece(pieceType PieceType, player PlayerType) Piece {
     return Piece {
-        pos: square{x, y},
         pieceType: pieceType,
         player: player,
     }
 }
 
 func (p Piece) String() string {
-    return fmt.Sprintf("type: %v (player: %v) on: %v,%v", p.pieceType, p.player, p.pos.x, p.pos.y)
+    return fmt.Sprintf("type: %v (player: %v)", p.pieceType, p.player)
 }
