@@ -83,6 +83,12 @@ func (b *Board) repositionPiece(fromX, fromY, toX, toY int) error {
     return nil
 }
 
+func (b *Board) copy() *Board {
+    // TODO: MUST COMPLETE THIS FUNC!
+    fmt.Printf("USING NON IMPLEMENTED FUNCTION 'copy()@board.go'!\n")
+    return b
+}
+
 func (b *Board) GetPiece(x, y int) Piece {
     return b.pieces[x][y]
 }
