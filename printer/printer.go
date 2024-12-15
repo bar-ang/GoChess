@@ -33,3 +33,7 @@ func PrintChessBoard(board *chess.Board) {
         fmt.Printf("\n")
     }
 }
+
+func PrintSelect(sel *chess.Select) {
+    PrintChessBoard(sel.Board())
+}
