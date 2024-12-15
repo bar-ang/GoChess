@@ -44,3 +44,7 @@ func NewPiece(pieceType PieceType, player PlayerType) Piece {
 func (p Piece) String() string {
     return fmt.Sprintf("type: %v (player: %v)", p.pieceType, p.player)
 }
+
+func (p Piece) Type() PieceType {
+    return p.pieceType
+}
