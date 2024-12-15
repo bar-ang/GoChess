@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"goChess/chess"
 	"goChess/printer"
 )
@@ -8,5 +9,14 @@ import (
 func main() {
 	board := chess.NewChessBoard()
 	board.SetStartingPos()
-	printer.PrintChessBoard(board)
+
+	sel, err := board.SelectPiece(7, 3)
+	// move selected piece somehow
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	printer.PrintSelect(&sel)
 }
