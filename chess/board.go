@@ -96,3 +96,11 @@ func (b *Board) GetPiece(x, y int) Piece {
 func (b *Board) hasPiece(x, y int) bool {
     return b.pieces[x][y].isPiece()
 }
+
+func  (b *Board) SelectPiece(x, y int) (Select, error) {
+    if !b.hasPiece(x, y) {
+        return Select{}, EmptySquareSelectedError
+    }
+
+    return Select{board: b}, nil
+}
