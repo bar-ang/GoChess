@@ -82,3 +82,7 @@ func (b *Board) repositionPiece(fromX, fromY, toX, toY int) error {
 
     return nil
 }
+
+func (b *Board) GetPiece(x, y int) Piece {
+    return b.pieces[x][y]
+}
