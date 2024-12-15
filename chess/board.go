@@ -3,7 +3,7 @@ package chess
 import "fmt"
 
 const BoardSize = 8
-var NonePieceSelectionError = fmt.Errorf("No piece is selected")
+var RepositionEmptySquareError = fmt.Errorf("No piece is selected")
 
 
 type Board struct {
@@ -74,7 +74,7 @@ func (b *Board) SetStartingPos() {
 func (b *Board) repositionPiece(fromX, fromY, toX, toY int) error {
     p := b.pieces[fromX][fromY]
     if !p.isPiece() {
-        return NonePieceSelectionError
+        return RepositionEmptySquareError
     }
 
     b.pieces[fromX][fromY] = NoPiece()
