@@ -111,6 +111,10 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
     }
 }
 
+func (b *Board) Size() int {
+    return len(b.pieces)
+}
+
 func (b *Board) selectRook(x, y int) Select {
     dirs := []square{
         sqr(-1,  0),
