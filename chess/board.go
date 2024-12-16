@@ -98,9 +98,84 @@ func (b *Board) hasPiece(x, y int) bool {
 }
 
 func  (b *Board) SelectPiece(x, y int) (Select, error) {
-    if !b.hasPiece(x, y) {
+    piece := b.GetPiece(x, y)
+    switch t := piece.pieceType; t {
+    case PieceQueen:
+        return b.selectQueen(x, y), nil
+    case PieceRook:
+        return b.selectRook(x, y), nil
+    case PieceBishop:
+        return b.selectBishop(x, y), nil
+    default:
         return Select{}, EmptySquareSelectedError
     }
+}
 
-    return Select{board: b}, nil
+func (b *Board) selectRook(x, y int) Select {
+    dirs := []square{
+        sqr(-1,  0),
+        sqr( 1,  0),
+        sqr( 0, -1),
+        sqr( 0,  1),
+    }
+
+    return b.selectRookOrBishopOrQueenByDirs(x, y, dirs)
+}
+
+func (b *Board) selectBishop(x, y int) Select {
+    dirs := []square{
+        sqr(-1,  1),
+        sqr( 1,  1),
+        sqr( 1, -1),
+        sqr(-1, -1),
+    }
+
+    return b.selectRookOrBishopOrQueenByDirs(x, y, dirs)
+}
+
+func (b *Board) selectQueen(x, y int) Select {
+    dirs := []square{
+        sqr(-1,  0),
+        sqr( 1,  0),
+        sqr( 0, -1),
+        sqr( 0,  1),
+        sqr(-1,  1),
+        sqr( 1,  1),
+        sqr( 1, -1),
+        sqr( 1,  1),
+    }
+
+    return b.selectRookOrBishopOrQueenByDirs(x, y, dirs)
+}
+
+func (b *Board) selectRookOrBishopOrQueenByDirs(x, y int, dirs []square) Select {
+    selected := b.GetPiece(x, y)
+    possible := make([]square, 0, 15)
+    threaten := make([]square, 0, 4)
+
+    for _, dir := range dirs {
+        for i := 1; i < BoardSize; i++ {
+            sq := sqr(x+i*dir.x, y+i*dir.y)
+            if !sq.inBounds() {
+                continue
+            }
+            pc := b.GetPiece(sq.x, sq.y)
+            if pc.isPiece() {
+                if pc.player != selected.player {
+                    possible = append(possible, sq)
+                    threaten = append(threaten, sq)
+                }
+                break
+            } else {
+                possible = append(possible, sq)
+            }
+        }
+    }
+
+    return Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: possible,
+        threatenPieces: threaten,
+    }
 }

@@ -14,6 +14,14 @@ func (sq square) comp(x, y int) bool {
     return sq.x == x && sq.y == y
 }
 
+func (sq square) inBounds() bool {
+    return sq.x >= 0 && sq.y >= 0 && sq.x < BoardSize && sq.y < BoardSize
+}
+
+func sqr(x, y int) square {
+    return square{x: x, y: y}
+}
+
 type Select struct {
     board *Board
     selected square
