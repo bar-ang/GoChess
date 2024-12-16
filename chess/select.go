@@ -10,6 +10,14 @@ type square struct {
     y int
 }
 
+func (sq square) X() int {
+    return sq.x
+}
+
+func (sq square) Y() int {
+    return sq.y
+}
+
 func (sq square) comp(x, y int) bool {
     return sq.x == x && sq.y == y
 }
@@ -27,6 +35,18 @@ type Select struct {
     selected square
     possibleMoves []square
     threatenPieces []square
+}
+
+func (s *Select) Selected() square {
+    return s.selected
+}
+
+func (s *Select) PossibleMoves() []square {
+    return s.possibleMoves
+}
+
+func (s *Select) ThreatenPieces() []square {
+    return s.threatenPieces
 }
 
 func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
