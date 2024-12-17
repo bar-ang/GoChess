@@ -110,6 +110,8 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
         return b.selectKing(x, y), nil
     case PiecePawn:
         return b.selectPawn(x, y), nil
+    case PieceKnight:
+        return b.selectKnight(x, y), nil
     default:
         return Select{}, EmptySquareSelectedError
     }
@@ -154,6 +156,41 @@ func (b *Board) selectQueen(x, y int) Select {
     }
 
     return b.selectRookOrBishopOrQueenByDirs(x, y, dirs)
+}
+
+func (b *Board) selectKnight(x, y int) Select {
+    selected := b.GetPiece(x, y)
+    possible := make([]square, 0, 4)
+    threaten := make([]square, 0, 2)
+
+    dir := []square {
+        sqr( 1, 2),
+        sqr(-1, 2),
+        sqr( 1,-2),
+        sqr(-1,-2),
+        sqr( 2, 1),
+        sqr( 2,-1),
+        sqr(-2, 1),
+        sqr(-2,-1),
+    }
+
+    for _, sq := range dir {
+        if p := b.GetPiece(sq.x, sq.y); p.isPiece() {
+            if p.player != selected.player {
+                possible = append(possible, sq)
+                threaten = append(threaten, sq)
+            }
+        } else {
+            possible = append(possible, sq)
+        }
+    }
+
+    return Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: possible,
+        threatenPieces: threaten,
+    }
 }
 
 func (b *Board) selectPawn(x, y int) Select {
