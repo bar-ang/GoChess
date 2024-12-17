@@ -108,6 +108,8 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
         return b.selectBishop(x, y), nil
     case PieceKing:
         return b.selectKing(x, y), nil
+    case PiecePawn:
+        return b.selectPawn(x, y), nil
     default:
         return Select{}, EmptySquareSelectedError
     }
@@ -152,6 +154,48 @@ func (b *Board) selectQueen(x, y int) Select {
     }
 
     return b.selectRookOrBishopOrQueenByDirs(x, y, dirs)
+}
+
+func (b *Board) selectPawn(x, y int) Select {
+    selected := b.GetPiece(x, y)
+    possible := make([]square, 0, 4)
+    threaten := make([]square, 0, 2)
+
+    dir := 1
+    if selected.player == PlayerBlack {
+        dir = -1
+    }
+
+    short := sqr(x, y+dir)
+    long := sqr(x, y+2*dir)
+    eatRight := sqr(x+dir, y+dir)
+    eatLeft := sqr(x-dir, y+dir)
+
+    if !b.hasPiece(short.x, short.y) {
+        possible = append(possible, short)
+        if ((selected.player == PlayerBlack && y==1) || (selected.player == PlayerWhite && y==BoardSize-2)) {
+            if !b.hasPiece(long.x, long.y) {
+                possible = append(possible, long)
+            }
+        }
+    }
+
+    if p := b.GetPiece(eatRight.x, eatRight.y); p.isPiece() && p.player != selected.player {
+        possible = append(possible, eatRight)
+        threaten = append(threaten, eatRight)
+    }
+
+    if p := b.GetPiece(eatLeft.x, eatLeft.y); p.isPiece() && p.player != selected.player {
+        possible = append(possible, eatLeft)
+        threaten = append(threaten, eatLeft)
+    }
+
+    return Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: possible,
+        threatenPieces: threaten,
+    }
 }
 
 func (b *Board) selectKing(x, y int) Select {
