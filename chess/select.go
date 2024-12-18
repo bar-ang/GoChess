@@ -35,6 +35,7 @@ type Select struct {
     selected square
     possibleMoves []square
     threatenPieces []square
+    checking bool
 }
 
 func (s *Select) Selected() square {
@@ -69,8 +70,12 @@ func (s *Select) threat(sq square) {
         panic("Trying to threat an empty square")
     }
 
-    s.threatenPieces = append(s.threatenPieces, sq)
-    s.possibleMoves = append(s.possibleMoves, sq)
+    if piece.pieceType != PieceKing {
+        s.threatenPieces = append(s.threatenPieces, sq)
+        s.possibleMoves = append(s.possibleMoves, sq)
+    } else {
+        s.checking = true
+    }
 }
 
 func (s *Select) Board() *Board {
