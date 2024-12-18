@@ -48,3 +48,7 @@ func (p Piece) String() string {
 func (p Piece) Type() PieceType {
     return p.pieceType
 }
+
+func (p Piece) Player() PlayerType {
+    return p.player
+}
