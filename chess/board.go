@@ -182,8 +182,7 @@ func (b *Board) selectKnight(x, y int) Select {
     for _, sq := range dir {
         if p := b.GetPiece(sq.x, sq.y); p.isPiece() {
             if p.player != selected.player {
-                sel.possibleMoves = append(sel.possibleMoves, sq)
-                sel.threatenPieces = append(sel.threatenPieces, sq)
+                sel.threat(sq)
             }
         } else {
             sel.possibleMoves = append(sel.possibleMoves, sq)
@@ -223,13 +222,11 @@ func (b *Board) selectPawn(x, y int) Select {
     }
 
     if p := b.GetPiece(eatRight.x, eatRight.y); p.isPiece() && p.player != selected.player {
-        sel.possibleMoves = append(sel.possibleMoves, eatRight)
-        sel.threatenPieces = append(sel.threatenPieces, eatRight)
+        sel.threat(eatRight)
     }
 
     if p := b.GetPiece(eatLeft.x, eatLeft.y); p.isPiece() && p.player != selected.player {
-        sel.possibleMoves = append(sel.possibleMoves, eatLeft)
-        sel.threatenPieces = append(sel.threatenPieces, eatLeft)
+        sel.threat(eatLeft)
     }
 
     return sel
@@ -252,8 +249,7 @@ func (b *Board) selectKing(x, y int) Select {
                 p := b.GetPiece(x+i, y+j)
                 if p.isPiece() {
                     if p.player != selected.player {
-                        sel.possibleMoves = append(sel.possibleMoves, sq)
-                        sel.threatenPieces = append(sel.threatenPieces, sq)
+                        sel.threat(sq)
                     }
                 } else {
                     sel.possibleMoves = append(sel.possibleMoves, sq)
@@ -284,8 +280,7 @@ func (b *Board) selectRookOrBishopOrQueenByDirs(x, y int, dirs []square) Select 
             pc := b.GetPiece(sq.x, sq.y)
             if pc.isPiece() {
                 if pc.player != selected.player {
-                    sel.possibleMoves = append(sel.possibleMoves, sq)
-                    sel.threatenPieces = append(sel.threatenPieces, sq)
+                    sel.threat(sq)
                 }
                 break
             } else {

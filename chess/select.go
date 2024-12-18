@@ -63,6 +63,16 @@ func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
     return nil, IllegalMoveError
 }
 
+func (s *Select) threat(sq square) {
+    piece := s.board.GetPiece(sq.x, sq.y)
+    if !piece.isPiece() {
+        panic("Trying to threat an empty square")
+    }
+
+    s.threatenPieces = append(s.threatenPieces, sq)
+    s.possibleMoves = append(s.possibleMoves, sq)
+}
+
 func (s *Select) Board() *Board {
     fmt.Println("USING UNIMPEMENTED FUNC Board()@select.go!")
     return s.board
