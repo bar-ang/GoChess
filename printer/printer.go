@@ -14,6 +14,7 @@ var WhitePlayerColor = color.RGB(255, 255, 255)
 var SelectedColor    = color.BgRGB(0, 255, 0)
 var ThreatenedColor  = color.BgRGB(255, 0, 255)
 var PossibleColor    = color.BgRGB(0, 0, 255)
+var CheckColor       = color.BgRGB(255, 20, 120)
 
 type printUnit struct {
     piece        chess.Piece
@@ -21,6 +22,7 @@ type printUnit struct {
     selected     bool
     threatened   bool
     possibleMove bool
+    inCheck      bool
 }
 
 func ChessPieceToString(piece chess.Piece) string {
@@ -59,10 +61,13 @@ func makePrintUnitsMap(sel *chess.Select) [][]printUnit {
     for i := 0; i < board.Size(); i++ {
         pu[i] = make([]printUnit, board.Size())
         for j := 0; j < board.Size(); j++ {
+            piece := board.GetPiece(i, j)
             pu[i][j] = printUnit {
-                piece: board.GetPiece(i, j),
+                piece: piece,
                 light: (i+j) % 2 != 0,
             }
+
+            pu[i][j].inCheck = sel.Checking() && piece.Type() == chess.PieceKing && piece.Player() != sel.Piece().Player()
         }
     }
 
@@ -80,6 +85,10 @@ func makePrintUnitsMap(sel *chess.Select) [][]printUnit {
 }
 
 func (pu printUnit) format() *color.Color {
+    if pu.inCheck {
+        return CheckColor
+    }
+
     if pu.threatened {
         return ThreatenedColor
     }
