@@ -160,8 +160,13 @@ func (b *Board) selectQueen(x, y int) Select {
 
 func (b *Board) selectKnight(x, y int) Select {
     selected := b.GetPiece(x, y)
-    possible := make([]square, 0, 4)
-    threaten := make([]square, 0, 2)
+
+    sel :=  Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: make([]square, 0, 4),
+        threatenPieces: make([]square, 0, 2),
+    }
 
     dir := []square {
         sqr( 1, 2),
@@ -177,26 +182,26 @@ func (b *Board) selectKnight(x, y int) Select {
     for _, sq := range dir {
         if p := b.GetPiece(sq.x, sq.y); p.isPiece() {
             if p.player != selected.player {
-                possible = append(possible, sq)
-                threaten = append(threaten, sq)
+                sel.possibleMoves = append(sel.possibleMoves, sq)
+                sel.threatenPieces = append(sel.threatenPieces, sq)
             }
         } else {
-            possible = append(possible, sq)
+            sel.possibleMoves = append(sel.possibleMoves, sq)
         }
     }
 
-    return Select {
-        board: b,
-        selected: sqr(x, y),
-        possibleMoves: possible,
-        threatenPieces: threaten,
-    }
+    return sel
 }
 
 func (b *Board) selectPawn(x, y int) Select {
     selected := b.GetPiece(x, y)
-    possible := make([]square, 0, 4)
-    threaten := make([]square, 0, 2)
+
+    sel := Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: make([]square, 0, 4),
+        threatenPieces: make([]square, 0, 2),
+    }
 
     dir := 1
     if selected.player == PlayerBlack {
@@ -209,36 +214,36 @@ func (b *Board) selectPawn(x, y int) Select {
     eatLeft := sqr(x-dir, y+dir)
 
     if !b.hasPiece(short.x, short.y) {
-        possible = append(possible, short)
+        sel.possibleMoves = append(sel.possibleMoves, short)
         if ((selected.player == PlayerBlack && y==1) || (selected.player == PlayerWhite && y==BoardSize-2)) {
             if !b.hasPiece(long.x, long.y) {
-                possible = append(possible, long)
+                sel.possibleMoves = append(sel.possibleMoves, long)
             }
         }
     }
 
     if p := b.GetPiece(eatRight.x, eatRight.y); p.isPiece() && p.player != selected.player {
-        possible = append(possible, eatRight)
-        threaten = append(threaten, eatRight)
+        sel.possibleMoves = append(sel.possibleMoves, eatRight)
+        sel.threatenPieces = append(sel.threatenPieces, eatRight)
     }
 
     if p := b.GetPiece(eatLeft.x, eatLeft.y); p.isPiece() && p.player != selected.player {
-        possible = append(possible, eatLeft)
-        threaten = append(threaten, eatLeft)
+        sel.possibleMoves = append(sel.possibleMoves, eatLeft)
+        sel.threatenPieces = append(sel.threatenPieces, eatLeft)
     }
 
-    return Select {
-        board: b,
-        selected: sqr(x, y),
-        possibleMoves: possible,
-        threatenPieces: threaten,
-    }
+    return sel
 }
 
 func (b *Board) selectKing(x, y int) Select {
     selected := b.GetPiece(x, y)
-    possible := make([]square, 0, 8)
-    threaten := make([]square, 0, 8)
+
+    sel := Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: make([]square, 0, 8),
+        threatenPieces: make([]square, 0, 8),
+    }
 
     for i := -1; i < 2; i++ {
         for j := -1; j < 2; j++ {
@@ -247,28 +252,28 @@ func (b *Board) selectKing(x, y int) Select {
                 p := b.GetPiece(x+i, y+j)
                 if p.isPiece() {
                     if p.player != selected.player {
-                        possible = append(possible, sq)
-                        threaten = append(threaten, sq)
+                        sel.possibleMoves = append(sel.possibleMoves, sq)
+                        sel.threatenPieces = append(sel.threatenPieces, sq)
                     }
                 } else {
-                    possible = append(possible, sqr(x+i, y+j))
+                    sel.possibleMoves = append(sel.possibleMoves, sq)
                 }
             }
         }
     }
 
-    return Select {
-        board: b,
-        selected: sqr(x, y),
-        possibleMoves: possible,
-        threatenPieces: threaten,
-    }
+    return sel
 }
 
 func (b *Board) selectRookOrBishopOrQueenByDirs(x, y int, dirs []square) Select {
     selected := b.GetPiece(x, y)
-    possible := make([]square, 0, 15)
-    threaten := make([]square, 0, 4)
+
+    sel := Select {
+        board: b,
+        selected: sqr(x, y),
+        possibleMoves: make([]square, 0, 15),
+        threatenPieces: make([]square, 0, 4),
+    }
 
     for _, dir := range dirs {
         for i := 1; i < BoardSize; i++ {
@@ -279,20 +284,15 @@ func (b *Board) selectRookOrBishopOrQueenByDirs(x, y int, dirs []square) Select 
             pc := b.GetPiece(sq.x, sq.y)
             if pc.isPiece() {
                 if pc.player != selected.player {
-                    possible = append(possible, sq)
-                    threaten = append(threaten, sq)
+                    sel.possibleMoves = append(sel.possibleMoves, sq)
+                    sel.threatenPieces = append(sel.threatenPieces, sq)
                 }
                 break
             } else {
-                possible = append(possible, sq)
+                sel.possibleMoves = append(sel.possibleMoves, sq)
             }
         }
     }
 
-    return Select {
-        board: b,
-        selected: sqr(x, y),
-        possibleMoves: possible,
-        threatenPieces: threaten,
-    }
+    return sel
 }
