@@ -78,6 +78,14 @@ func (s *Select) threat(sq square) {
     }
 }
 
+func (s *Select) Piece() Piece {
+    return s.board.GetPiece(s.selected.x, s.selected.y)
+}
+
+func (s *Select) Checking() bool {
+    return s.checking
+}
+
 func (s *Select) Board() *Board {
     fmt.Println("USING UNIMPEMENTED FUNC Board()@select.go!")
     return s.board
