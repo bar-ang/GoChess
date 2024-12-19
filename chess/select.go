@@ -50,6 +50,34 @@ func (s *Select) ThreatenPieces() []square {
     return s.threatenPieces
 }
 
+func (s *Select) removePossibleMovesDueToCheck() {
+    possibles := make([]square, 0, len(s.possibleMoves))
+    threatened := make([]square, 0, len(s.threatenPieces))
+
+    for _, move := range s.possibleMoves {
+        nboard, err := s.moveSelectedPiece(move.x, move.y)
+        if err != nil {
+            panic("could not look for possible checks.")
+        }
+        if !nboard.InCheck(s.Piece().player) {
+            possibles = append(possibles, move)
+        }
+    }
+
+    for _, move := range s.threatenPieces {
+        nboard, err := s.moveSelectedPiece(move.x, move.y)
+        if err != nil {
+            panic("could not look for possible checks.")
+        }
+        if !nboard.InCheck(s.Piece().player) {
+            threatened = append(threatened, move)
+        }
+    }
+
+    s.possibleMoves = possibles
+    s.threatenPieces = threatened
+}
+
 func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
     for _, sq := range s.possibleMoves {
         if sq.comp(toX, toY) {

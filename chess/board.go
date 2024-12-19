@@ -137,6 +137,8 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
         return Select{}, EmptySquareSelectedError
     }
 
+    sel.removePossibleMovesDueToCheck()
+
     return sel, nil
 }
 
