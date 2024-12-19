@@ -98,23 +98,26 @@ func (b *Board) hasPiece(x, y int) bool {
 }
 
 func  (b *Board) SelectPiece(x, y int) (Select, error) {
+    sel := Select{}
     piece := b.GetPiece(x, y)
     switch t := piece.pieceType; t {
     case PieceQueen:
-        return b.selectQueen(x, y), nil
+        sel = b.selectQueen(x, y)
     case PieceRook:
-        return b.selectRook(x, y), nil
+        sel = b.selectRook(x, y)
     case PieceBishop:
-        return b.selectBishop(x, y), nil
+        sel = b.selectBishop(x, y)
     case PieceKing:
-        return b.selectKing(x, y), nil
+        sel = b.selectKing(x, y)
     case PiecePawn:
-        return b.selectPawn(x, y), nil
+        sel = b.selectPawn(x, y)
     case PieceKnight:
-        return b.selectKnight(x, y), nil
+        sel = b.selectKnight(x, y)
     default:
         return Select{}, EmptySquareSelectedError
     }
+
+    return sel, nil
 }
 
 func (b *Board) Size() int {
