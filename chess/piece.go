@@ -26,6 +26,14 @@ type Piece struct {
     player PlayerType
 }
 
+func Opponent(player PlayerType) PlayerType {
+    if player == PlayerBlack {
+        return PlayerWhite
+    }
+
+    return PlayerBlack
+}
+
 func NoPiece() Piece {
     return Piece {pieceType: PieceNone}
 }
