@@ -97,6 +97,26 @@ func (b *Board) hasPiece(x, y int) bool {
     return b.pieces[x][y].isPiece()
 }
 
+func (b *Board) InCheck(player PlayerType) bool {
+    for i := 0; i < BoardSize; i++ {
+        for j := 0; j < BoardSize; j++ {
+            piece := b.GetPiece(i, j)
+            if piece.isPiece() && piece.player != player {
+                sel, err := b.SelectPiece(i, j)
+                if err != nil {
+                    panic("cannot verify check")
+                }
+
+                if sel.checking {
+                    return true
+                }
+            }
+        }
+    }
+
+    return false
+}
+
 func  (b *Board) SelectPiece(x, y int) (Select, error) {
     sel := Select{}
     piece := b.GetPiece(x, y)
