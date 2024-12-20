@@ -179,13 +179,13 @@ func (b *Board) selectBishop(x, y int) Select {
 
 func (b *Board) selectQueen(x, y int) Select {
     dirs := []square{
+        sqr(-1, -1),
         sqr(-1,  0),
-        sqr( 1,  0),
+        sqr(-1,  1),
         sqr( 0, -1),
         sqr( 0,  1),
-        sqr(-1,  1),
-        sqr( 1,  1),
         sqr( 1, -1),
+        sqr( 1,  0),
         sqr( 1,  1),
     }
 
