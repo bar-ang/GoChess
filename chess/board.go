@@ -55,6 +55,10 @@ func (b *Board) setRooksInStartingPos() {
     b.pieces[BoardSize-1][7] = NewPiece(PieceRook, PlayerWhite)
 }
 
+func (b *Board) SetPiece(x, y int, piece Piece) {
+    b.pieces[x][y] = piece
+}
+
 func (b *Board) setPawnsInStartingPos() {
     for i := 0; i < 8; i++ {
         b.pieces[1][i] = NewPiece(PiecePawn, PlayerBlack)
