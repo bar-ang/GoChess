@@ -45,13 +45,8 @@ func ChessPieceToString(piece chess.Piece) string {
 }
 
 func PrintChessBoard(board *chess.Board) {
-    for i := 0; i < chess.BoardSize; i++ {
-        for j := 0; j < chess.BoardSize; j++ {
-            p := board.GetPiece(i, j)
-            fmt.Printf("%v", ChessPieceToString(p))
-        }
-        fmt.Printf("\n")
-    }
+    var sel chess.Select = board.SelectNone()
+    PrintSelect(&sel)
 }
 
 func makePrintUnitsMap(sel *chess.Select) [][]printUnit {
