@@ -4,3 +4,4 @@ pkg/
 *.log
 *.out
 build/
+main
