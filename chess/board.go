@@ -150,6 +150,11 @@ func (b *Board) Size() int {
     return len(b.pieces)
 }
 
+func (b *Board) SelectNone() Select {
+    return Select{board: b, selected: sqr(-1, -1)}
+}
+
+
 func (b *Board) selectRook(x, y int) Select {
     dirs := []square{
         sqr(-1,  0),
