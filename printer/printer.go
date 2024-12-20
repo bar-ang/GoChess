@@ -9,8 +9,8 @@ import (
 //Color Scheme
 var BlackSquareColor = color.BgRGB(40, 40, 40)
 var WhiteSquareColor = color.BgRGB(140, 140, 140)
-var BlackPlayerColor = color.RGB(255, 0, 0)
-var WhitePlayerColor = color.RGB(255, 255, 255)
+var BlackPlayerColor = []int{255, 0, 0}
+var WhitePlayerColor = []int{255, 255, 255}
 var SelectedColor    = color.BgRGB(0, 255, 0)
 var ThreatenedColor  = color.BgRGB(255, 0, 255)
 var PossibleColor    = color.BgRGB(0, 0, 255)
@@ -66,14 +66,16 @@ func makePrintUnitsMap(sel *chess.Select) [][]printUnit {
         }
     }
 
-    pu[sel.Selected().X()][sel.Selected().Y()].selected = true
+    if sel.Selected().X() >= 0 {
+        pu[sel.Selected().X()][sel.Selected().Y()].selected = true
 
-    for _, v := range sel.ThreatenPieces() {
-        pu[v.X()][v.Y()].threatened = true
-    }
+        for _, v := range sel.ThreatenPieces() {
+            pu[v.X()][v.Y()].threatened = true
+        }
 
-    for _, v := range sel.PossibleMoves() {
-        pu[v.X()][v.Y()].possibleMove = true
+        for _, v := range sel.PossibleMoves() {
+            pu[v.X()][v.Y()].possibleMove = true
+        }
     }
 
     return pu
@@ -107,7 +109,13 @@ func PrintSelect(sel *chess.Select) {
     pu := makePrintUnitsMap(sel)
     for _, row := range pu {
         for _, v := range row {
-            v.format().Printf(" %v ", ChessPieceToString(v.piece))
+            f := v.format()
+            if v.piece.Player() == chess.PlayerBlack {
+                f = f.AddRGB(BlackPlayerColor[0], BlackPlayerColor[1], BlackPlayerColor[2])
+            } else {
+                f = f.AddRGB(WhitePlayerColor[0], WhitePlayerColor[1], WhitePlayerColor[2])
+            }
+            f.Printf(" %v ", ChessPieceToString(v.piece))
         }
         fmt.Println()
     }
