@@ -214,6 +214,9 @@ func (b *Board) selectKnight(x, y int) Select {
     }
 
     for _, sq := range dir {
+        if !sq.inBounds() {
+            continue
+        }
         if p := b.GetPiece(sq.x, sq.y); p.isPiece() {
             if p.player != selected.player {
                 sel.threat(sq)
