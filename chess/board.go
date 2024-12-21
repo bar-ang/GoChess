@@ -198,8 +198,8 @@ func (b *Board) selectKnight(x, y int) Select {
     sel :=  Select {
         board: b,
         selected: sqr(x, y),
-        possibleMoves: make([]square, 0, 4),
-        threatenPieces: make([]square, 0, 2),
+        possibleMoves: make([]square, 0, 8),
+        threatenPieces: make([]square, 0, 8),
     }
 
     dir := []square {
@@ -213,7 +213,8 @@ func (b *Board) selectKnight(x, y int) Select {
         sqr(-2,-1),
     }
 
-    for _, sq := range dir {
+    for _, d := range dir {
+        sq := sqr(x+d.x, y+d.y)
         if !sq.inBounds() {
             continue
         }
