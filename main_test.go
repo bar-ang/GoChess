@@ -121,6 +121,28 @@ func TestShowBoards(t *testing.T) {
 			},
 			selected: sqr(0, 5),
 		},
+
+		{
+			testName: "WhiteKnightInCenter",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(3, 3): chess.NewPiece(chess.PieceKnight, chess.PlayerWhite),
+			},
+			selected: sqr(3, 3),
+		},
+		{
+			testName: "WhiteKingtInCenter",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(3, 3): chess.NewPiece(chess.PieceKing, chess.PlayerWhite),
+			},
+			selected: sqr(3, 3),
+		},
+		{
+			testName: "BlackKingtInCenter",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(7, 0): chess.NewPiece(chess.PieceKing, chess.PlayerBlack),
+			},
+			selected: sqr(7, 0),
+		},
 	}
 
 	for _, c := range cases {
