@@ -143,6 +143,86 @@ func TestShowBoards(t *testing.T) {
 			},
 			selected: sqr(7, 0),
 		},
+		{
+			testName: "BlackRookThreatsPawnI",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(2, 6),
+		},
+		{
+			testName: "BlackRookThreatsPawnII",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+				sqr(3, 6): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(2, 6),
+		},
+		{
+			testName: "BlackRookThreatsPawnIII",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+				sqr(2, 1): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(2, 6),
+		},
+		{
+			testName: "BlackRookThreatsPawnIV",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerBlack),
+				sqr(3, 6): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(2, 6),
+		},
+		{
+			testName: "BlackRookThreatsPawnV",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerBlack),
+				sqr(3, 6): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(3, 6),
+		},
+		{
+			testName: "BlackRookThreatsPawnVI",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(2, 2): chess.NewPiece(chess.PiecePawn, chess.PlayerBlack),
+				sqr(5, 6): chess.NewPiece(chess.PiecePawn, chess.PlayerWhite),
+			},
+			selected: sqr(5, 6),
+		},
+		{
+			testName: "BlackRookCheckingI",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(7, 4): chess.NewPiece(chess.PieceRook, chess.PlayerWhite),
+				sqr(2, 2): chess.NewPiece(chess.PieceKing, chess.PlayerWhite),
+			},
+			selected: sqr(2, 6),
+		},
+		{
+			testName: "BlackRookCheckingII",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(7, 4): chess.NewPiece(chess.PieceRook, chess.PlayerWhite),
+				sqr(2, 2): chess.NewPiece(chess.PieceKing, chess.PlayerWhite),
+			},
+			selected: sqr(2, 2),
+		},
+		{
+			testName: "BlackRookCheckingIII",
+			setPieces: map[squareTest]chess.Piece{
+				sqr(2, 6): chess.NewPiece(chess.PieceRook, chess.PlayerBlack),
+				sqr(7, 4): chess.NewPiece(chess.PieceRook, chess.PlayerWhite),
+				sqr(2, 2): chess.NewPiece(chess.PieceKing, chess.PlayerWhite),
+			},
+			selected: sqr(7, 4),
+		},
 	}
 
 	for _, c := range cases {
