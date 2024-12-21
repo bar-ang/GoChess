@@ -240,19 +240,19 @@ func (b *Board) selectPawn(x, y int) Select {
         threatenPieces: make([]square, 0, 2),
     }
 
-    dir := 1
+    dir := -1
     if selected.player == PlayerBlack {
-        dir = -1
+        dir = 1
     }
 
-    short := sqr(x, y+dir)
-    long := sqr(x, y+2*dir)
+    short := sqr(x+dir, y)
+    long := sqr(x+2*dir, y)
     eatRight := sqr(x+dir, y+dir)
-    eatLeft := sqr(x-dir, y+dir)
+    eatLeft := sqr(x+dir, y-dir)
 
     if !b.hasPiece(short.x, short.y) {
         sel.possibleMoves = append(sel.possibleMoves, short)
-        if ((selected.player == PlayerBlack && y==1) || (selected.player == PlayerWhite && y==BoardSize-2)) {
+        if ((selected.player == PlayerBlack && x==1) || (selected.player == PlayerWhite && x==BoardSize-2)) {
             if !b.hasPiece(long.x, long.y) {
                 sel.possibleMoves = append(sel.possibleMoves, long)
             }
