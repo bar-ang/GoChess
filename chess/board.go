@@ -75,22 +75,26 @@ func (b *Board) SetStartingPos() {
     b.setPawnsInStartingPos()
 }
 
-func (b *Board) repositionPiece(fromX, fromY, toX, toY int) error {
-    p := b.pieces[fromX][fromY]
+func (b *Board) repositionPiece(fromX, fromY, toX, toY int) (*Board, error) {
+    nb := b.copy()
+    p := nb.pieces[fromX][fromY]
     if !p.isPiece() {
-        return RepositionEmptySquareError
+        return nil, RepositionEmptySquareError
     }
 
-    b.pieces[fromX][fromY] = NoPiece()
-    b.pieces[toX][toY] = p
+    nb.pieces[fromX][fromY] = NoPiece()
+    nb.pieces[toX][toY] = p
 
-    return nil
+    return nb, nil
 }
 
 func (b *Board) copy() *Board {
-    // TODO: MUST COMPLETE THIS FUNC!
-    fmt.Printf("USING NON IMPLEMENTED FUNCTION 'copy()@board.go'!\n")
-    return b
+    nPieces := make([][]Piece, len(b.pieces))
+    for i := range b.pieces {
+        nPieces[i] = make([]Piece, len(b.pieces[i]))
+        copy(nPieces[i], b.pieces[i])
+    }
+    return &Board{ pieces : nPieces }
 }
 
 func (b *Board) GetPiece(x, y int) Piece {
