@@ -110,7 +110,7 @@ func (b *Board) InCheck(player PlayerType) bool {
         for j := 0; j < BoardSize; j++ {
             piece := b.GetPiece(i, j)
             if piece.isPiece() && piece.player != player {
-                sel, err := b.SelectPiece(i, j)
+                sel, err := b.SelectPieceIgnoreCheck(i, j)
                 if err != nil {
                     panic("cannot verify check")
                 }
@@ -126,6 +126,17 @@ func (b *Board) InCheck(player PlayerType) bool {
 }
 
 func  (b *Board) SelectPiece(x, y int) (Select, error) {
+    sel, err := b.SelectPieceIgnoreCheck(x, y)
+    if err != nil {
+        return Select{}, err
+    }
+
+    sel.removePossibleMovesDueToCheck()
+
+    return sel, nil
+}
+
+func  (b *Board) SelectPieceIgnoreCheck(x, y int) (Select, error) {
     sel := Select{}
     piece := b.GetPiece(x, y)
     switch t := piece.pieceType; t {
@@ -144,8 +155,6 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
     default:
         return Select{}, EmptySquareSelectedError
     }
-
-    sel.removePossibleMovesDueToCheck()
 
     return sel, nil
 }
