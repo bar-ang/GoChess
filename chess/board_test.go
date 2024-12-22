@@ -6,6 +6,60 @@ import (
     "github.com/stretchr/testify/require"
 )
 
+func TestBoardCopy(t *testing.T) {
+    board := NewChessBoard()
+    board.SetPiece(0, 0, NewPiece(PieceKing, PlayerBlack))
+    board.SetPiece(1, 1, NewPiece(PieceQueen, PlayerWhite))
+    board.SetPiece(6, 5, NewPiece(PiecePawn, PlayerBlack))
+
+    nBoard := board.copy()
+
+    for i, row := range board.pieces {
+        for j, v := range row {
+            require.Equal(t, nBoard.pieces[i][j], v)
+        }
+    }
+
+    nBoard.pieces[6][5] = NoPiece()
+    nBoard.pieces[6][6] = NewPiece(PieceBishop, PlayerWhite)
+
+    require.Equal(t, board.pieces[6][5], NewPiece(PiecePawn, PlayerBlack))
+    require.Equal(t, board.pieces[6][6], NoPiece())
+}
+
+func TestRepositionPiece(t *testing.T) {
+    t.Run("NoError", func(t *testing.T) {
+        board := NewChessBoard()
+        board.SetPiece(0, 0, NewPiece(PieceKing, PlayerBlack))
+        board.SetPiece(1, 1, NewPiece(PieceQueen, PlayerWhite))
+        board.SetPiece(6, 5, NewPiece(PiecePawn, PlayerBlack))
+
+        nb, err := board.repositionPiece(6, 5, 3, 4)
+        require.NoError(t, err)
+
+        require.Equal(t, nb.pieces[6][5], NoPiece())
+        require.Equal(t, nb.pieces[3][4], NewPiece(PiecePawn, PlayerBlack))
+        require.Equal(t, nb.pieces[1][1], NewPiece(PieceQueen, PlayerWhite))
+        require.Equal(t, nb.pieces[0][0], NewPiece(PieceKing, PlayerBlack))
+
+        nb2, err := nb.repositionPiece(3, 4, 1, 1)
+        require.NoError(t, err)
+
+        require.Equal(t, nb2.pieces[3][4], NoPiece())
+        require.Equal(t, nb2.pieces[1][1], NewPiece(PiecePawn, PlayerBlack))
+        require.Equal(t, nb2.pieces[0][0], NewPiece(PieceKing, PlayerBlack))
+    })
+    t.Run("RepositionEmptySquareError", func(t *testing.T) {
+        board := NewChessBoard()
+        board.SetPiece(0, 0, NewPiece(PieceKing, PlayerBlack))
+        board.SetPiece(1, 1, NewPiece(PieceQueen, PlayerWhite))
+        board.SetPiece(6, 5, NewPiece(PiecePawn, PlayerBlack))
+
+        _, err := board.repositionPiece(6, 6, 7, 7)
+        require.ErrorIs(t, err, RepositionEmptySquareError)
+    })
+}
+
 func TestSelectBasic(t *testing.T) {
     pieces := []Piece {
         NewPiece(PieceRook, PlayerWhite),
