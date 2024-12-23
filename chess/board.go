@@ -8,12 +8,15 @@ var RepositionEmptySquareError = fmt.Errorf("No piece is selected")
 
 type Board struct {
     pieces [][]Piece
+    active [][]bool
 }
 
 func NewChessBoard() *Board {
     pieces := make([][]Piece, BoardSize)
+    active := make([][]bool, BoardSize)
     for i, _ := range pieces {
         pieces[i] = make([]Piece, BoardSize)
+        active[i] = make([]bool, BoardSize)
         for j, _ := range pieces[i] {
             pieces[i][j] = NoPiece()
         }
@@ -21,6 +24,7 @@ func NewChessBoard() *Board {
 
     return &Board{
         pieces: pieces,
+        active: active,
     }
 }
 
@@ -85,6 +89,8 @@ func (b *Board) repositionPiece(fromX, fromY, toX, toY int) (*Board, error) {
     nb.pieces[fromX][fromY] = NoPiece()
     nb.pieces[toX][toY] = p
 
+    nb.active[fromX][fromY] = true
+
     return nb, nil
 }
 
@@ -103,6 +109,10 @@ func (b *Board) GetPiece(x, y int) Piece {
 
 func (b *Board) hasPiece(x, y int) bool {
     return b.pieces[x][y].isPiece()
+}
+
+func (b *Board) isActive(x, y int) bool {
+    return b.active[x][y]
 }
 
 func (b *Board) promotionNeeded(x, y int) bool {
