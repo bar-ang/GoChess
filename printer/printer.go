@@ -115,7 +115,7 @@ func PrintSelect(sel *chess.Select) {
             } else {
                 f = f.AddRGB(WhitePlayerColor[0], WhitePlayerColor[1], WhitePlayerColor[2])
             }
-            f.Printf(" %v ", ChessPieceToString(v.piece))
+            f.Printf("\033[1m %v \033[0m", ChessPieceToString(v.piece))
         }
         fmt.Println()
     }
