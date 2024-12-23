@@ -115,6 +115,5 @@ func (s *Select) Checking() bool {
 }
 
 func (s *Select) Board() *Board {
-    fmt.Println("USING UNIMPEMENTED FUNC Board()@select.go!")
-    return s.board
+    return s.board.copy()
 }
