@@ -55,7 +55,7 @@ func (s *Select) removePossibleMovesDueToCheck() {
     threatened := make([]square, 0, len(s.threatenPieces))
 
     for _, move := range s.possibleMoves {
-        nboard, err := s.moveSelectedPiece(move.x, move.y)
+        nboard, err := s.board.repositionPiece(s.selected.x, s.selected.y, move.x, move.y)
         if err != nil {
             panic("could not look for possible checks.")
         }
@@ -65,7 +65,7 @@ func (s *Select) removePossibleMovesDueToCheck() {
     }
 
     for _, move := range s.threatenPieces {
-        nboard, err := s.moveSelectedPiece(move.x, move.y)
+        nboard, err := s.board.repositionPiece(s.selected.x, s.selected.y, move.x, move.y)
         if err != nil {
             panic("could not look for possible checks.")
         }
