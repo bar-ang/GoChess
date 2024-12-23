@@ -7,14 +7,14 @@ import (
 )
 
 //Color Scheme
-var BlackSquareColor = color.BgRGB(40, 40, 40)
-var WhiteSquareColor = color.BgRGB(140, 140, 140)
-var BlackPlayerColor = []int{255, 0, 0}
-var WhitePlayerColor = []int{255, 255, 255}
-var SelectedColor    = color.BgRGB(0, 255, 0)
-var ThreatenedColor  = color.BgRGB(255, 0, 255)
-var PossibleColor    = color.BgRGB(0, 0, 255)
-var CheckColor       = color.BgRGB(255, 20, 120)
+var BlackSquareColor = color.BgRGB(102, 51, 0)
+var WhiteSquareColor = color.BgRGB(255, 204, 102)
+var BlackPlayerColor = []int{255, 51, 0}
+var WhitePlayerColor = []int{204, 255, 255}
+var SelectedColor    = color.BgRGB(51, 204, 204)
+var ThreatenedColor  = color.BgRGB(255, 102, 153)
+var PossibleColor    = color.BgRGB(102, 204, 255)
+var CheckColor       = color.BgRGB(255, 77, 77)
 
 type printUnit struct {
     piece        chess.Piece
