@@ -84,6 +84,7 @@ func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
             if board, err := s.board.repositionPiece(sq.x, sq.y, toX, toY); err != nil {
                 return nil, err
             } else {
+                board.applySpecialRules(sq.x, sq.y, toX, toY)
                 return board, nil
             }
         }

@@ -149,6 +149,12 @@ func  (b *Board) SelectPiece(x, y int) (Select, error) {
     return sel, nil
 }
 
+func (b *Board) applySpecialRules(sx, sy, tx, ty int) {
+    if b.promotionNeeded(tx, ty) {
+        b.promote(tx, ty, PieceQueen)
+    }
+}
+
 func  (b *Board) SelectPieceIgnoreCheck(x, y int) (Select, error) {
     sel := Select{}
     piece := b.GetPiece(x, y)
