@@ -105,6 +105,19 @@ func (b *Board) hasPiece(x, y int) bool {
     return b.pieces[x][y].isPiece()
 }
 
+func (b *Board) promotionNeeded(x, y int) bool {
+    if x > 0 && x < 7 {
+        return false
+    }
+    p := b.GetPiece(x, y)
+    return p.pieceType == PiecePawn && ((p.player == PlayerWhite && x == 0) || (p.player == PlayerBlack && x == 7))
+}
+
+func (b *Board) promote(x, y int, newType PieceType) {
+    p := b.GetPiece(x, y)
+    b.SetPiece(x, y, NewPiece(newType, p.player))
+}
+
 func (b *Board) InCheck(player PlayerType) bool {
     for i := 0; i < BoardSize; i++ {
         for j := 0; j < BoardSize; j++ {
