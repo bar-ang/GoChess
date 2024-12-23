@@ -60,6 +60,28 @@ func TestRepositionPiece(t *testing.T) {
     })
 }
 
+func TestPawnPromotion(t *testing.T) {
+    board := NewChessBoard()
+    board.SetPiece(0, 0, NewPiece(PiecePawn, PlayerBlack))
+    board.SetPiece(0, 2, NewPiece(PiecePawn, PlayerWhite))
+    board.SetPiece(7, 4, NewPiece(PiecePawn, PlayerBlack))
+    board.SetPiece(7, 5, NewPiece(PiecePawn, PlayerWhite))
+    board.SetPiece(6, 5, NewPiece(PiecePawn, PlayerBlack))
+    board.SetPiece(4, 4, NewPiece(PiecePawn, PlayerBlack))
+
+    require.False(t, board.promotionNeeded(0, 0))
+    require.True(t, board.promotionNeeded(0, 2))
+    require.True(t, board.promotionNeeded(7, 4))
+    require.False(t, board.promotionNeeded(7, 5))
+    require.False(t, board.promotionNeeded(6, 5))
+    require.False(t, board.promotionNeeded(4, 4))
+
+    board.promote(0, 2, PieceQueen)
+    board.promote(7, 4, PieceKnight)
+    require.Equal(t, board.GetPiece(0, 2), NewPiece(PieceQueen, PlayerWhite))
+    require.Equal(t, board.GetPiece(7, 4), NewPiece(PieceKnight, PlayerBlack))
+}
+
 func TestSelectBasic(t *testing.T) {
     pieces := []Piece {
         NewPiece(PieceRook, PlayerWhite),
