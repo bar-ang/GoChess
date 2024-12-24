@@ -112,25 +112,22 @@ func (b *Board) castleAvailable(kingX, kingY int, right bool) bool {
         panic("Absurd board position :(")
     }
 
+    s := 1
+    t := kingY
+    p := b.GetPiece(kingX, 0)
     if right {
-        p := b.GetPiece(kingX, BoardSize - 1)
-        if p.pieceType != PieceRook || p.player != king.player {
+        s = kingX + 1
+        t = BoardSize - 1
+        p = b.GetPiece(kingX, BoardSize - 1)
+    }
+
+    if p.pieceType != PieceRook || p.player != king.player {
+        return false
+    }
+
+    for i := s; i < t; i++ {
+        if b.hasPiece(kingX, i) {
             return false
-        }
-        for i := kingY + 1; i < BoardSize - 1; i++ {
-            if b.hasPiece(kingX, i) {
-                return false
-            }
-        }
-    } else {
-        p := b.GetPiece(kingX, 0)
-        if p.pieceType != PieceRook || p.player != king.player {
-            return false
-        }
-        for i := 1; i < kingY; i++ {
-            if b.hasPiece(kingX, i) {
-                return false
-            }
         }
     }
 
