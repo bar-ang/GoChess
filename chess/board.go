@@ -94,6 +94,49 @@ func (b *Board) repositionPiece(fromX, fromY, toX, toY int) (*Board, error) {
     return nb, nil
 }
 
+func (b *Board) rightCastleAvailable(kingX, kingY int) bool {
+    return b.castleAvailable(kingX, kingY, true)
+}
+
+func (b *Board) leftCastleAvailable(kingX, kingY int) bool {
+    return b.castleAvailable(kingX, kingY, false)
+}
+
+func (b *Board) castleAvailable(kingX, kingY int, right bool) bool {
+    if b.active[kingX][kingY] {
+        return false
+    }
+
+    king := b.GetPiece(kingX, kingY)
+    if king.pieceType != PieceKing {
+        panic("Absurd board position :(")
+    }
+
+    if right {
+        p := b.GetPiece(kingX, BoardSize - 1)
+        if p.pieceType != PieceRook || p.player != king.player {
+            return false
+        }
+        for i := kingY + 1; i < BoardSize - 1; i++ {
+            if b.hasPiece(kingX, i) {
+                return false
+            }
+        }
+    } else {
+        p := b.GetPiece(kingX, 0)
+        if p.pieceType != PieceRook || p.player != king.player {
+            return false
+        }
+        for i := 1; i < kingY; i++ {
+            if b.hasPiece(kingX, i) {
+                return false
+            }
+        }
+    }
+
+    return true
+}
+
 func (b *Board) copy() *Board {
     nPieces := make([][]Piece, len(b.pieces))
     for i := range b.pieces {
@@ -320,6 +363,7 @@ func (b *Board) selectKing(x, y int) Select {
         selected: sqr(x, y),
         possibleMoves: make([]square, 0, 8),
         threatenPieces: make([]square, 0, 8),
+        possibleCastle: make([]square, 0, 2),
     }
 
     for i := -1; i < 2; i++ {
@@ -336,6 +380,14 @@ func (b *Board) selectKing(x, y int) Select {
                 }
             }
         }
+    }
+
+    if b.rightCastleAvailable(x, y) {
+        sel.possibleCastle = append(sel.possibleCastle, sqr(x, y+2))
+    }
+
+    if b.leftCastleAvailable(x, y) {
+        sel.possibleCastle = append(sel.possibleCastle, sqr(x, y-2))
     }
 
     return sel
