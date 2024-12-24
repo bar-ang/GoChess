@@ -81,10 +81,10 @@ func (s *Select) removePossibleMovesDueToCheck() {
 func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
     for _, sq := range s.possibleMoves {
         if sq.comp(toX, toY) {
-            if board, err := s.board.repositionPiece(sq.x, sq.y, toX, toY); err != nil {
+            if board, err := s.board.repositionPiece(s.selected.x, s.selected.y, toX, toY); err != nil {
                 return nil, err
             } else {
-                board.applySpecialRules(sq.x, sq.y, toX, toY)
+                board.applySpecialRules(s.selected.x, s.selected.y, toX, toY)
                 return board, nil
             }
         }
