@@ -4,6 +4,7 @@ import "fmt"
 
 const BoardSize = 8
 var RepositionEmptySquareError = fmt.Errorf("No piece is selected")
+var RepositionPieceToSameSquareError = fmt.Errorf("Tried to reposition piece from one position to the same.")
 
 
 type Board struct {
@@ -80,6 +81,10 @@ func (b *Board) SetStartingPos() {
 }
 
 func (b *Board) repositionPiece(fromX, fromY, toX, toY int) (*Board, error) {
+    if fromX == toX && fromY == toY {
+        return nil, RepositionPieceToSameSquareError
+    }
+
     nb := b.copy()
     p := nb.pieces[fromX][fromY]
     if !p.isPiece() {
