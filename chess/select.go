@@ -35,6 +35,7 @@ type Select struct {
     selected square
     possibleMoves []square
     threatenPieces []square
+    possibleCastle []square
     checking bool
 }
 
@@ -48,6 +49,34 @@ func (s *Select) PossibleMoves() []square {
 
 func (s *Select) ThreatenPieces() []square {
     return s.threatenPieces
+}
+
+func (s *Select) canCastle() bool {
+    return s.possibleCastle != nil && len(s.possibleCastle) > 0
+}
+
+func (s *Select) castle(x, y int) *Board {
+    if !s.canCastle() {
+        panic("castling should've already been verified possible!")
+    }
+
+    rookPos := sqr(s.selected.x, 0)
+    dir := 1
+    if x > s.selected.x {
+        rookPos = sqr(s.selected.x, BoardSize-1)
+        dir = -1
+    }
+
+    nb, err := s.board.repositionPiece(s.selected.x, s.selected.y, x, y)
+    if err != nil {
+        panic(fmt.Errorf("cannot castle non-king: %v", err))
+    }
+    nb, err = nb.repositionPiece(rookPos.x, rookPos.y, rookPos.x, y+dir)
+    if err != nil {
+        panic(fmt.Errorf("cannot move rook during castlling: %v", err))
+    }
+
+    return nb
 }
 
 func (s *Select) removePossibleMovesDueToCheck() {
@@ -84,6 +113,16 @@ func (s *Select) moveSelectedPiece(toX, toY int) (*Board, error) {
             if board, err := s.board.repositionPiece(s.selected.x, s.selected.y, toX, toY); err != nil {
                 return nil, err
             } else {
+                board.applySpecialRules(s.selected.x, s.selected.y, toX, toY)
+                return board, nil
+            }
+        }
+    }
+
+    if s.possibleCastle != nil {
+        for _, sq := range s.possibleCastle {
+            if sq.comp(toX, toY) {
+                board := s.castle(toX, toY)
                 board.applySpecialRules(s.selected.x, s.selected.y, toX, toY)
                 return board, nil
             }
