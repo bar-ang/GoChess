@@ -134,6 +134,11 @@ func (b *Board) castleAvailable(kingX, kingY int, right bool) bool {
         if b.hasPiece(kingX, i) {
             return false
         }
+        if nb, err := b.repositionPiece(kingX, kingY, kingX, i); err != nil {
+            panic(fmt.Errorf("should be able to reposition the king for castle verification: %v", err))
+        } else if nb.InCheck(king.player) {
+            return false
+        }
     }
 
     return true
